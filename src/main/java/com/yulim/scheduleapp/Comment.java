@@ -7,16 +7,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Schedule extends BaseTimeEntity {
+public class Comment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 30)
-    private String title;
-
-    @Column(nullable = false, length = 200)
+    @Column(nullable = false, length = 100)
     private String content;
 
     @Column(nullable = false)
@@ -25,19 +22,13 @@ public class Schedule extends BaseTimeEntity {
     @Column(nullable = false)
     private String password;
 
-    public Schedule(String title, String content, String author, String password) {
-        this.title = title;
+    @Column(nullable = false)
+    private Long scheduleId;
+
+    public Comment(String content, String author, String password, Long scheduleId) {
         this.content = content;
         this.author = author;
         this.password = password;
-    }
-
-    public void update(String title, String author) {
-        this.title = title;
-        this.author = author;
-    }
-
-    public boolean isPasswordMismatch(String password) {
-        return !this.password.equals(password);
+        this.scheduleId = scheduleId;
     }
 }
