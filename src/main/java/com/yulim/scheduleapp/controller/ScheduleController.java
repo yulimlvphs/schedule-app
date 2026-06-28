@@ -1,6 +1,7 @@
 package com.yulim.scheduleapp.controller;
 import com.yulim.scheduleapp.dto.ScheduleCreateRequest;
 import com.yulim.scheduleapp.dto.ScheduleResponse;
+import com.yulim.scheduleapp.dto.ScheduleUpdateRequest;
 import com.yulim.scheduleapp.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -32,5 +33,13 @@ public class ScheduleController {
             @PathVariable Long scheduleId
     ) {
         return scheduleService.findSchedule(scheduleId);
+    }
+
+    @PutMapping("/{scheduleId}")
+    public ScheduleResponse updateSchedule(
+            @PathVariable Long scheduleId,
+            @RequestBody ScheduleUpdateRequest request
+    ) {
+        return scheduleService.updateSchedule(scheduleId,request);
     }
 }

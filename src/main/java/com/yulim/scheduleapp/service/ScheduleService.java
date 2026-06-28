@@ -2,6 +2,7 @@ package com.yulim.scheduleapp.service;
 import com.yulim.scheduleapp.Schedule;
 import com.yulim.scheduleapp.dto.ScheduleCreateRequest;
 import com.yulim.scheduleapp.dto.ScheduleResponse;
+import com.yulim.scheduleapp.dto.ScheduleUpdateRequest;
 import com.yulim.scheduleapp.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,20 @@ public class ScheduleService {
     public ScheduleResponse findSchedule(Long scheduleId) {
         Schedule schedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 일정입니다."));
+
+        return new ScheduleResponse(schedule);
+    }
+
+    @Transactional
+    public ScheduleResponse updateSchedule(Long scheduleId, ScheduleUpdateRequest request) {
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 일정입니다. "));
+
+        if(schedule.isPasswordMismatch(request.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        schedule.update(request.getTitle(), request.getAuthor());
 
         return new ScheduleResponse(schedule);
     }

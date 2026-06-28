@@ -1,5 +1,4 @@
 package com.yulim.scheduleapp;
-
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -8,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Schedule extends BaseTimeEntity{
+public class Schedule extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,5 +30,15 @@ public class Schedule extends BaseTimeEntity{
         this.content = content;
         this.author = author;
         this.password = password;
+    }
+
+    // 일정 제목과 작성자명만 수정 가능
+    public void update(String title, String author) {
+        this.title = title;
+        this.author = author;
+    }
+
+    public boolean isPasswordMismatch(String password) {
+        return !this.password.equals(password);
     }
 }
