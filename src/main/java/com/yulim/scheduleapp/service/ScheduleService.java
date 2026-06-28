@@ -1,9 +1,7 @@
 package com.yulim.scheduleapp.service;
 import com.yulim.scheduleapp.Schedule;
-import com.yulim.scheduleapp.dto.ScheduleCreateRequest;
-import com.yulim.scheduleapp.dto.ScheduleDeleteRequest;
-import com.yulim.scheduleapp.dto.ScheduleResponse;
-import com.yulim.scheduleapp.dto.ScheduleUpdateRequest;
+import com.yulim.scheduleapp.dto.*;
+import com.yulim.scheduleapp.repository.CommentRepository;
 import com.yulim.scheduleapp.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +14,7 @@ import java.util.List;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public ScheduleResponse createSchedule(ScheduleCreateRequest request) {
@@ -45,11 +44,24 @@ public class ScheduleService {
                 .toList();
     }
 
-    public ScheduleResponse findSchedule(Long scheduleId) {
+    public ScheduleDetailResponse findSchedule(Long scheduleId) {
         Schedule schedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 일정입니다."));
 
-        return new ScheduleResponse(schedule);
+        List<CommentResponse> comments = commentRepository.findByScheduleId(scheduleId)
+                .stream()
+                .map(CommentResponse::new)
+                .toList();
+
+        return new ScheduleDetailResponse(
+                schedule.getId(),
+                schedule.getTitle(),
+                schedule.getContent(),
+                schedule.getAuthor(),
+                schedule.getCreatedAt(),
+                schedule.getModifiedAt(),
+                comments
+        );
     }
 
     @Transactional

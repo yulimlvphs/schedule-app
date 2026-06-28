@@ -1,7 +1,5 @@
 package com.yulim.scheduleapp.controller;
-import com.yulim.scheduleapp.dto.ScheduleCreateRequest;
-import com.yulim.scheduleapp.dto.ScheduleResponse;
-import com.yulim.scheduleapp.dto.ScheduleUpdateRequest;
+import com.yulim.scheduleapp.dto.*;
 import com.yulim.scheduleapp.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +27,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/{scheduleId}")
-    public ScheduleResponse findSchedule(
+    public ScheduleDetailResponse findSchedule(
             @PathVariable Long scheduleId
     ) {
         return scheduleService.findSchedule(scheduleId);
@@ -41,5 +39,13 @@ public class ScheduleController {
             @RequestBody ScheduleUpdateRequest request
     ) {
         return scheduleService.updateSchedule(scheduleId,request);
+    }
+
+    @DeleteMapping("/{scheduleId}")
+    public void deleteSchedule(
+            @PathVariable Long scheduleId,
+            @RequestBody ScheduleDeleteRequest request
+    ) {
+        scheduleService.deleteSchedule(scheduleId, request);
     }
 }
