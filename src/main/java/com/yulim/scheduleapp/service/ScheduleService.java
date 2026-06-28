@@ -1,6 +1,7 @@
 package com.yulim.scheduleapp.service;
 import com.yulim.scheduleapp.Schedule;
 import com.yulim.scheduleapp.dto.ScheduleCreateRequest;
+import com.yulim.scheduleapp.dto.ScheduleDeleteRequest;
 import com.yulim.scheduleapp.dto.ScheduleResponse;
 import com.yulim.scheduleapp.dto.ScheduleUpdateRequest;
 import com.yulim.scheduleapp.repository.ScheduleRepository;
@@ -63,5 +64,17 @@ public class ScheduleService {
         schedule.update(request.getTitle(), request.getAuthor());
 
         return new ScheduleResponse(schedule);
+    }
+
+    @Transactional
+    public void deleteSchedule(Long scheduleId, ScheduleDeleteRequest request) {
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않은 일정입니다."));
+
+        if(schedule.isPasswordMismatch(request.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        scheduleRepository.delete(schedule);
     }
 }
